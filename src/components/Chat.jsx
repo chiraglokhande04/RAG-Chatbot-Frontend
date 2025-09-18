@@ -38,7 +38,7 @@ function Chat() {
             let existingId = localStorage.getItem("sessionId");
 
             if (!existingId) {
-                const res = await axios.post(`${API_URL}/session`);
+                const res = await axios.post(`${API_URL}/api/session`);
                 existingId = res.data.sessionId;
                 localStorage.setItem("sessionId", existingId);
             }
@@ -58,7 +58,7 @@ function Chat() {
     // Helper: fetch chat history
     const fetchHistory = async (id) => {
         try {
-            const res = await axios.get(`${API_URL}/session/${id}/history`);
+            const res = await axios.get(`${API_URL}/api/session/${id}/history`);
             const history = (res.data.history || []).map((msg) => ({
                 role: msg.role || "user",
                 text: msg.text || "",
@@ -82,7 +82,7 @@ function Chat() {
         setLoading(true);
 
         try {
-            const res = await axios.post(`${API_URL}/chat`, {
+            const res = await axios.post(`${API_URL}/api/chat`, {
                 sessionId,
                 message: input,
             });
@@ -109,7 +109,7 @@ function Chat() {
     // Reset session
     const resetSession = async () => {
         if (!sessionId) return;
-        await axios.post(`${API_URL}/session/${sessionId}/clear`);
+        await axios.post(`${API_URL}/api/session/${sessionId}/clear`);
         setMessages([]);
         const res = await axios.post(`${API_URL}/session`);
         const newSessionId = res.data.sessionId;
